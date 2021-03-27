@@ -2,8 +2,10 @@ package com.linebot;
 
 import com.linebot.airtable.AirTableService;
 import com.linebot.airtable.entity.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-
+@Slf4j
 class DemoApplicationTests {
 
 	@Autowired
@@ -37,9 +40,11 @@ class DemoApplicationTests {
 
 	int size = 0;
 
-	@Before
-	public void initSize(){
+
+	@BeforeEach
+	public void init(){
 		size = airTableService.getAll().size();
+		log.info("size = " + size);
 	}
 
 	@Test
@@ -67,7 +72,7 @@ class DemoApplicationTests {
 		mockMvc.perform(requestBuilder)
 				.andDo(print())
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.length").value(size + 1));
+				.andExpect(jsonPath("$",hasSize(size)));
 	}
 
 

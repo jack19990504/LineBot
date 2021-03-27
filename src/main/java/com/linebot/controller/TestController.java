@@ -31,7 +31,7 @@ public class TestController {
     public ResponseEntity post(){
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        var log = new Log("test", "test", now.format(formatter), "Yes");
+        var log = new Log("jack", "mvc test", now.format(formatter), "Yes");
 
         return ResponseEntity.status(HttpStatus.CREATED).body(airTableService.create(log));
     }
